@@ -91,7 +91,7 @@ client.search_hashtag('#LikeeNewYear2022')
 client.search_video('toosie slide')
 
 # a low level api client is also available 🤘🏻
-api = Likee.build_api
+api = Likee.build_api(proxy: 'https://user:pass@example.com')
 
 api.creator_videos(creator_id: '111', cursor: '69453454234234212', limit: 30)
 ```
