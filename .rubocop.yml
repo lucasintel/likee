@@ -1,0 +1,55 @@
+AllCops:
+  TargetRubyVersion: 3.1
+  NewCops: enable
+  SuggestExtensions: false
+
+Layout/LineLength:
+  Max: 115
+  Exclude:
+    - 'spec/**/*'
+
+Style/Documentation:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: always_true
+  SafeAutoCorrect: true
+
+Style/LambdaCall:
+  Enabled: false
+
+Style/EndlessMethod:
+  Enabled: true
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/CommentedKeyword:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Lint/AssignmentInCondition:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false

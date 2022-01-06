@@ -1,0 +1,27 @@
+{
+  "uid": "30007",
+  "yyuid": "Likee_USA",
+  "nick_name": "Likee US",
+  "user_name": "Likee_USA",
+  "data1": "https://img.like.video/asia_live/3s1/2Fu61w.jpg",
+  "birthday": "2014-2-3",
+  "exactCountryCode": "US",
+  "bigUrl": "https://img.like.video/asia_live/3s2/0dwqyT.jpg",
+  "bio": "bio content",
+  "logo": [
+    ""
+  ],
+  "gender": 0,
+  "pendant": {
+    "id": "",
+    "name": "",
+    "url": ""
+  },
+  "PGC": "{\"model\":\"authentication_title_personal_30007\",\"type\":\"1\",\"url\":\"\"}",
+  "likeeId": "Likee_USA",
+  "allLikeCount": 14891646,
+  "fansCount": 33493455,
+  "followCount": 1071,
+  "age": 7,
+  "constellation": "Aquarius"
+}
