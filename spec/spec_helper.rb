@@ -4,10 +4,6 @@ require 'simplecov'
 SimpleCov.start do
   enable_coverage :branch
 end
-if ENV['CI']
-  require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
 
 require 'likee'
 
