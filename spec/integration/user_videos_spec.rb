@@ -11,7 +11,7 @@ RSpec.describe 'Creator Videos' do
 
   it 'returns creator videos' do
     api = Likee::Api.new
-    collection = api.creator_videos(user_id: '30007')
+    collection = api.creator_videos(creator_id: '30007')
     expect(collection).to be_any
   end
 end
