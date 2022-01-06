@@ -3,8 +3,9 @@
 Zero dependencies library designed to provide a stable and straightforward
 interface to the Likee API.
 
+[![Test Coverage](https://api.codeclimate.com/v1/badges/25ef2b2e4eb6be569fa9/test_coverage)](https://codeclimate.com/github/kandayo/likee/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/25ef2b2e4eb6be569fa9/maintainability)](https://codeclimate.com/github/kandayo/likee/maintainability)
 [![CI](https://github.com/kandayo/likee/actions/workflows/main.yml/badge.svg)](https://github.com/kandayo/likee/actions/workflows/main.yml)
-[![codecov](https://codecov.io/gh/kandayo/likee/branch/main/graph/badge.svg?token=R2he4NY3yx)](https://codecov.io/gh/kandayo/likee)
 [![GitHub release](https://img.shields.io/github/release/kandayo/likee.svg?label=Release)](https://github.com/kandayo/likee/releases)
 
 ---
