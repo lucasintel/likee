@@ -96,7 +96,6 @@ module Likee
     def trending_videos(country: :US, language: :en, start: 0, cursor: 0, limit: 30, user_id: nil, device_id: nil)
       http_response = transport.post(
         endpoint: TRENDING_VIDEOS_ENDPOINT,
-        response_format: :json,
         request_format: :json,
         body: {
           scene: 'WELOG_POPULAR',
@@ -130,8 +129,7 @@ module Likee
     def trending_hashtags(country: :US, language: :en, page: 1, per: 100)
       http_response = transport.post(
         endpoint: TRENDING_HASHTAGS_ENDPOINT,
-        response_format: :json,
-        request_format: :form_data,
+        request_format: :form_url_encoded,
         body: {
           pagesize: per,
           page:,
@@ -160,8 +158,7 @@ module Likee
     def hashtag_videos(hashtag_id:, country: :US, page: 1, per: 50)
       http_response = transport.post(
         endpoint: HASHTAG_VIDEOS_ENDPOINT,
-        response_format: :json,
-        request_format: :form_data,
+        request_format: :form_url_encoded,
         body: {
           topicId: hashtag_id,
           pageSize: per,
@@ -205,7 +202,6 @@ module Likee
     def creator_videos(user_id:, cursor: 0, limit: 100)
       http_response = transport.post(
         endpoint: CREATOR_VIDEOS_ENDPOINT,
-        response_format: :json,
         request_format: :json,
         body: {
           count: limit,
@@ -235,7 +231,6 @@ module Likee
     def video_comments(video_id:, language: :en, cursor: 0, limit: 49)
       http_response = transport.get(
         endpoint: VIDEO_COMMENTS_ENDPOINT,
-        response_format: :json,
         query_params: {
           post_id: video_id,
           lang: language,

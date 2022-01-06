@@ -38,6 +38,10 @@ module Likee
       def random_user_id(length = 10)
         Array.new(length) { Random.rand(1..9) }.join.to_i
       end
+
+      def object_identity(object)
+        "#{object.class.name}(0x#{object_id.to_s(16)})"
+      end
     end
   end
 end

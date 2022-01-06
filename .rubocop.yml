@@ -4,7 +4,7 @@ AllCops:
   SuggestExtensions: false
 
 Layout/LineLength:
-  Max: 115
+  Max: 120
   Exclude:
     - 'spec/**/*'
 
@@ -52,4 +52,7 @@ Lint/AssignmentInCondition:
   Enabled: false
 
 Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Style/FormatString:
   Enabled: false

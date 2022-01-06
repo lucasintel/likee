@@ -75,4 +75,10 @@ RSpec.describe Likee::Util do
       expect(described_class.random_user_id).to eq(1111111111)
     end
   end
+
+  describe '.object_identity' do
+    it 'returns the object identity' do
+      expect(described_class.object_identity(String.new)).to include('String(0x')
+    end
+  end
 end

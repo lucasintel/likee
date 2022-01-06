@@ -15,7 +15,6 @@ RSpec.describe Likee::Api do
           .to receive(:post)
           .with(
             endpoint: 'https://api.like-video.com/likee-activity-flow-micro/videoApi/getSquareVideos',
-            response_format: :json,
             request_format: :json,
             body: {
               scene: 'WELOG_POPULAR',
@@ -76,7 +75,6 @@ RSpec.describe Likee::Api do
           .to receive(:post)
           .with(
             endpoint: 'https://api.like-video.com/likee-activity-flow-micro/videoApi/getSquareVideos',
-            response_format: :json,
             request_format: :json,
             body: {
               scene: 'WELOG_POPULAR',
@@ -104,7 +102,6 @@ RSpec.describe Likee::Api do
           .to receive(:post)
           .with(
             endpoint: 'https://api.like-video.com/likee-activity-flow-micro/videoApi/getSquareVideos',
-            response_format: :json,
             request_format: :json,
             body: {
               scene: 'WELOG_POPULAR',
@@ -134,8 +131,7 @@ RSpec.describe Likee::Api do
           .to receive(:post)
           .with(
             endpoint: 'https://likee.video/official_website/RecommendApi/getRecommendHashtag',
-            response_format: :json,
-            request_format: :form_data,
+            request_format: :form_url_encoded,
             body: {
               pagesize: 11,
               page: 2,
@@ -163,8 +159,7 @@ RSpec.describe Likee::Api do
           .to receive(:post)
           .with(
             endpoint: 'https://likee.video/official_website/RecommendApi/getRecommendHashtag',
-            response_format: :json,
-            request_format: :form_data,
+            request_format: :form_url_encoded,
             body: {
               pagesize: 100,
               page: 1,
@@ -189,8 +184,7 @@ RSpec.describe Likee::Api do
           .to receive(:post)
           .with(
             endpoint: 'https://likee.video/official_website/VideoApi/getEventVideo',
-            response_format: :json,
-            request_format: :form_data,
+            request_format: :form_url_encoded,
             body: {
               topicId: 1,
               pageSize: 20,
@@ -248,8 +242,7 @@ RSpec.describe Likee::Api do
           .to receive(:post)
           .with(
             endpoint: 'https://likee.video/official_website/VideoApi/getEventVideo',
-            response_format: :json,
-            request_format: :form_data,
+            request_format: :form_url_encoded,
             body: {
               topicId: 1,
               pageSize: 50,
@@ -274,7 +267,6 @@ RSpec.describe Likee::Api do
           .to receive(:post)
           .with(
             endpoint: 'https://api.like-video.com/likee-activity-flow-micro/videoApi/getUserVideo',
-            response_format: :json,
             request_format: :json,
             body: {
               count: 20,
@@ -328,7 +320,6 @@ RSpec.describe Likee::Api do
           .to receive(:post)
           .with(
             endpoint: 'https://api.like-video.com/likee-activity-flow-micro/videoApi/getUserVideo',
-            response_format: :json,
             request_format: :json,
             body: {
               count: 100,
@@ -354,7 +345,6 @@ RSpec.describe Likee::Api do
           .to receive(:get)
           .with(
             endpoint: 'https://likee.video/live/home/comments',
-            response_format: :json,
             query_params: {
               post_id: '111',
               lang: 'ru',
@@ -389,7 +379,6 @@ RSpec.describe Likee::Api do
           .to receive(:get)
           .with(
             endpoint: 'https://likee.video/live/home/comments',
-            response_format: :json,
             query_params: {
               post_id: '111',
               lang: :en,

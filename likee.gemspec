@@ -27,6 +27,8 @@ Gem::Specification.new do |spec|
   spec.executables = []
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'net-http-persistent', '~> 4.0'
+
   spec.add_development_dependency 'factory_bot', '~> 6.2'
   spec.add_development_dependency 'oj', '~> 3.13', '>= 3.13.11'
   spec.add_development_dependency 'pry', '~> 0.14.1'
