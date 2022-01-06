@@ -277,7 +277,7 @@ RSpec.describe Likee::Api do
           )
           .and_return(double(:http_response, body: returned_data))
 
-        collection = subject.creator_videos(user_id: '1', limit: 20, cursor: '111')
+        collection = subject.creator_videos(creator_id: '1', limit: 20, cursor: '111')
 
         expect(collection[25].id).to eq(Likee::Snowflake.new('6931059820922920991'))
         expect(collection[25].uploaded_at).to eq(Time.parse('2021-02-19 16:31:59 -0300'))
@@ -330,7 +330,7 @@ RSpec.describe Likee::Api do
           )
           .and_return(double(:http_response, body: returned_data))
 
-        subject.creator_videos(user_id: '1')
+        subject.creator_videos(creator_id: '1')
       end
     end
   end

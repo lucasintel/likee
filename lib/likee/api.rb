@@ -199,7 +199,7 @@ module Likee
     # @param limit [Integer] the number of entries per iteration
     #
     # @return [Array<Likee:Video>]
-    def creator_videos(user_id:, cursor: 0, limit: 100)
+    def creator_videos(creator_id:, cursor: 0, limit: 100)
       http_response = transport.post(
         endpoint: CREATOR_VIDEOS_ENDPOINT,
         request_format: :json,
@@ -207,7 +207,7 @@ module Likee
           count: limit,
           lastPostId: cursor,
           tabType: 0,
-          uid: user_id
+          uid: creator_id
         }
       )
 
