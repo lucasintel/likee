@@ -3,8 +3,9 @@
 Zero dependencies library designed to provide a stable and straightforward
 interface to the Likee API.
 
+[![CI](https://github.com/kandayo/likee/actions/workflows/main.yml/badge.svg)](https://github.com/kandayo/likee/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/kandayo/likee/branch/main/graph/badge.svg?token=R2he4NY3yx)](https://codecov.io/gh/kandayo/likee)
 [![GitHub release](https://img.shields.io/github/release/kandayo/likee.svg?label=Release)](https://github.com/kandayo/likee/releases)
-[![CI](https://github.com/kandayo/likee/actions/workflows/ci.yml/badge.svg)](https://github.com/kandayo/likee/actions/workflows/ci.yml)
 
 ---
 

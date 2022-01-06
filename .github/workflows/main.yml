@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+env:
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  CI: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
