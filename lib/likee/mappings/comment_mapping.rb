@@ -5,10 +5,6 @@ require_relative '../util'
 
 module Likee
   class CommentMapping
-    def self.map_collection(collection)
-      collection.map { |data| new(data).call }
-    end
-
     def self.call(data)
       new(data).call
     end

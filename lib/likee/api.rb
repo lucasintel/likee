@@ -1,60 +1,23 @@
 # frozen_string_literal: true
 
 require_relative 'transport'
-require_relative 'mappings/comment_mapping'
+require_relative 'mappings/comment_collection_mapping'
 require_relative 'mappings/creator_mapping'
-require_relative 'mappings/hashtag_mapping'
-require_relative 'mappings/video_mapping'
+require_relative 'mappings/hashtag_collection_mapping'
+require_relative 'mappings/video_collection_mapping'
 require_relative 'configuration'
 require_relative 'util'
 
 module Likee
   class Api
-    TRENDING_VIDEOS_ENDPOINT = 'https://api.like-video.com/likee-activity-flow-micro/videoApi/getSquareVideos'
-    CREATOR_VIDEOS_ENDPOINT = 'https://api.like-video.com/likee-activity-flow-micro/videoApi/getUserVideo'
+    TRENDING_VIDEOS_ENDPOINT   = 'https://api.like-video.com/likee-activity-flow-micro/videoApi/getSquareVideos'
+    CREATOR_VIDEOS_ENDPOINT    = 'https://api.like-video.com/likee-activity-flow-micro/videoApi/getUserVideo'
     TRENDING_HASHTAGS_ENDPOINT = 'https://likee.video/official_website/RecommendApi/getRecommendHashtag'
-    HASHTAG_VIDEOS_ENDPOINT = 'https://likee.video/official_website/VideoApi/getEventVideo'
-    VIDEO_COMMENTS_ENDPOINT = 'https://likee.video/live/home/comments'
+    HASHTAG_VIDEOS_ENDPOINT    = 'https://likee.video/official_website/VideoApi/getEventVideo'
+    VIDEO_COMMENTS_ENDPOINT    = 'https://likee.video/live/home/comments'
 
     INITIAL_STATE_CREATOR_DATA_REGEX = /"userinfo":(?<user_info>{.*}),"/
 
-    private_constant :INITIAL_STATE_CREATOR_DATA_REGEX
-
-    class LikeeResponse
-      attr_reader :code, :data
-
-      def initialize(code:, data:)
-        @code = code
-        @data = data
-        freeze
-      end
-
-      def success?
-        code.zero?
-      end
-
-      def error?
-        !success?
-      end
-    end
-
-    # Instantiates a low level API client used to interact with Likee.
-    #
-    # @param user_agent [String] the User-Agent header used by the library
-    # @param referer [String] the Referer header used by the library
-    # @param custom_device_id [String] optional, the library generates a random
-    #   device ID for each request, however you might want to set a consistent
-    #   one to improve recommendations
-    # @param custom_user_id [String] optional, the library generates a random
-    #   user ID for each request, however you might want to set a consistent one
-    #   to improve recommendations
-    # @param keep_alive_timeout [Integer] the Keep-Alive timeout
-    # @param open_timeout [Integer]
-    # @param read_timeout [Integer]
-    # @param write_timeout [Integer]
-    # @param proxy [String] optional, a string containing your proxy address
-    #
-    # @return [Likee::Api]
     def initialize(
       transport: Likee::Transport,
       user_agent: 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
@@ -82,13 +45,13 @@ module Likee
       freeze
     end
 
-    # Explore trending videos from a given location.
+    # Returns the trending videos from a given location.
     #
-    # @param country [String] the target country code
-    # @param language [String] the target language
-    # @param limit [Integer] the number of posts per iteration
-    # @param start [Integer] the recommendation offset
-    # @param cursor [String] the last video ID from the previous iteration
+    # @param country [String] the country two-letter code (alpha-2)
+    # @param language [String] the two-letter language code
+    # @param limit [Integer] the number of videos to fetch per iteration
+    # @param start [Integer]
+    # @param cursor [String] the last video id from the previous iteration
     # @param user_id [String] the user id
     # @param device_id [String] the device id
     #
@@ -109,19 +72,13 @@ module Likee
         }
       )
 
-      response = build_response(http_response)
-      return [] if response.error?
-
-      collection = response.data['videoList']
-      return [] if collection.nil? || !collection.is_a?(Array)
-
-      Likee::VideoMapping.map_collection(collection)
+      VideoCollectionMapping.(http_response.body)
     end
 
-    # Explore trending hashtags from a given location.
+    # Returns the trending hashtags from a given location.
     #
-    # @param country [String] the target country code
-    # @param language [String] the target language
+    # @param country [String] the country two-letter code (alpha-2)
+    # @param language [String] the two-letter language code
     # @param page [Integer]
     # @param per [Integer]
     #
@@ -138,19 +95,13 @@ module Likee
         }
       )
 
-      response = build_response(http_response)
-      return [] if response.error?
-
-      collection = response.data['eventList']
-      return [] if collection.nil? || !collection.is_a?(Array)
-
-      Likee::HashtagMapping.map_collection(collection)
+      HashtagCollectionMapping.(http_response.body)
     end
 
-    # Explore videos from a given hashtag.
+    # Returns the videos of the given hashtag.
     #
-    # @param hashtag_id [String] the hashtag ID
-    # @param country [String] the target country code
+    # @param hashtag_id [String] the hashtag id
+    # @param country [String] the country two-letter code (alpha-2)
     # @param page [Integer]
     # @param per [Integer]
     #
@@ -167,18 +118,13 @@ module Likee
         }
       )
 
-      response = build_response(http_response)
-      return [] if response.error?
-
-      collection = response.data['videoList']
-      return [] if collection.nil? || !collection.is_a?(Array)
-
-      Likee::VideoMapping.map_collection(collection)
+      VideoCollectionMapping.(http_response.body)
     end
 
-    # Find creators by username.
+    # Finds creator by username.
     #
     # @param username [String] the creator username
+    #
     # @return [Array<Likee:Video>]
     def find_creator(username)
       http_response = transport.get(endpoint: "https://likee.video/@#{username}")
@@ -192,11 +138,11 @@ module Likee
       Likee::CreatorMapping.(parsed_profile_data)
     end
 
-    # Explore videos from a given creator.
+    # Returns the videos of the given creator.
     #
-    # @param user_id [String] the hashtag ID
-    # @param cursor [String] the last video ID from the previous iteration
-    # @param limit [Integer] the number of entries per iteration
+    # @param user_id [String] the hashtag id
+    # @param cursor [String] the last video id from the previous iteration
+    # @param limit [Integer] the number of entries to fetch per iteration
     #
     # @return [Array<Likee:Video>]
     def creator_videos(creator_id:, cursor: 0, limit: 100)
@@ -211,21 +157,15 @@ module Likee
         }
       )
 
-      response = build_response(http_response)
-      return [] if response.error?
-
-      collection = response.data['videoList']
-      return [] if collection.nil? || !collection.is_a?(Array)
-
-      Likee::VideoMapping.map_collection(collection)
+      VideoCollectionMapping.(http_response.body)
     end
 
-    # View comments from a given video.
+    # Returns the comments of the given video.
     #
-    # @param video_id [String] the hashtag ID
-    # @param language [String] the desired language
-    # @param cursor [Integer] the last video ID from the previous iteration
-    # @param limit [Integer] the number of entries per iteration
+    # @param video_id [String] the video id
+    # @param language [String] a two-letter language code
+    # @param cursor [Integer] the last comment id from the previous iteration
+    # @param limit [Integer] the number of entries to fetch per iteration
     #
     # @return [Array<Likee:Video>]
     def video_comments(video_id:, language: :en, cursor: 0, limit: 49)
@@ -239,24 +179,11 @@ module Likee
         }
       )
 
-      response = build_response(http_response)
-      return [] if response.error?
-
-      collection = response.data
-      return [] if collection.nil? || !collection.is_a?(Array)
-
-      Likee::CommentMapping.map_collection(collection)
+      CommentCollectionMapping.(http_response.body)
     end
 
     private
 
     attr_reader :transport, :config
-
-    def build_response(http_response)
-      code = http_response.body['code']
-      data = http_response.body['data']
-
-      LikeeResponse.new(code:, data:)
-    end
   end
 end

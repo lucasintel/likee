@@ -4,10 +4,6 @@ require_relative '../models/hashtag'
 
 module Likee
   class HashtagMapping
-    def self.map_collection(collection)
-      collection.map { |data| new(data).call }
-    end
-
     def self.call(data)
       new(data).call
     end
