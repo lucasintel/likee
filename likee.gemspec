@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.summary     = 'A library designed to provide a stable and straightforward interface to the Likee API.'
   spec.description = spec.summary
   spec.homepage    = 'https://github.com/kandayo/likee'
-  spec.license     = 'MIT'
+  spec.license     = 'BSD-3-Clause'
 
   spec.required_ruby_version = '>= 3.1.0'
 

@@ -163,4 +163,4 @@ https://github.com/kandayo/likee.
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The library is available as open source under the terms of the [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause).
