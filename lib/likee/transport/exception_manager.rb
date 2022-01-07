@@ -72,6 +72,8 @@ module Likee
 
     class UnprocessableEntityError < HTTPError; end
 
+    class TooManyRequestsError < HTTPError; end
+
     module ExceptionManager
       def self.net_http_exceptions
         NET_HTTP_EXCEPTIONS_MAP.keys
@@ -108,6 +110,7 @@ module Likee
           when 404 then NotFoundError
           when 407 then ProxyAuthenticationRequired
           when 422 then UnprocessableEntityError
+          when 429 then TooManyRequestsError
           when 400..499
             ClientError
           else

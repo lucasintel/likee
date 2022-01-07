@@ -475,6 +475,12 @@ RSpec.describe Likee::Transport do
         .to raise_exception(described_class::UnprocessableEntityError, 'The server responded with a status of 422')
     end
 
+    it 'raises UnprocessableEntityError when status is 429 Too Many Requests' do
+      stub_request(:get, 'https://test.host').to_return(status: 429)
+      expect { subject.get(endpoint: 'https://test.host') }
+        .to raise_exception(described_class::TooManyRequestsError, 'The server responded with a status of 429')
+    end
+
     it 'raises ClientError when status is 415 Random Error' do
       stub_request(:get, 'https://test.host').to_return(status: 415)
       expect { subject.get(endpoint: 'https://test.host') }
