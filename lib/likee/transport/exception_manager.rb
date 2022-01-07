@@ -2,64 +2,46 @@
 
 module Likee
   class Transport
-    CONNECT_TIMEOUT_ERROR_MESSAGE =
-      'Timed out trying to connect to Likee (Request: %<url>s). ' \
-      "Please check your internet connection and Likee's service status. (%<error>s)"
-
-    READ_TIMEOUT_ERROR_MESSAGE =
-      'Timed out while reading data from Likee (Request: %<url>s). ' \
-      "Please check your internet connection and Likee's service status. (%<error>s)"
-
-    WRITE_TIMEOUT_ERROR_MESSAGE =
-      'Timed out while sending data to Likee (Request: %<url>s). ' \
-      "Please check your internet connection and Likee's service status. (%<error>s)"
-
-    CONNECTION_ERROR_MESSAGE =
-      'Unexpected error when trying to connect to Likee (Request: %<url>s). ' \
-      'Please check your internet connection. (%<error>s)'
-
-    SSL_ERROR_MESSAGE =
-      'Could not establish a secure connection to Likee (Request: %<url>s). (%<error>s)'
-
-    UNEXPECTED_READ_ERROR_MESSAGE =
-      'Unexpected error while reading data from Likee (Request: %<url>s). ' \
-      "Please check your internet connection and Likee's service status. (%<error>s)"
-
-    # rubocop:disable Layout/HashAlignment
-    NET_HTTP_EXCEPTIONS_MAP = {
-      EOFError                     => CONNECTION_ERROR_MESSAGE,
-      Errno::EADDRNOTAVAIL         => CONNECTION_ERROR_MESSAGE,
-      Errno::ECONNABORTED          => UNEXPECTED_READ_ERROR_MESSAGE,
-      Errno::ECONNREFUSED          => CONNECTION_ERROR_MESSAGE,
-      Errno::ECONNRESET            => UNEXPECTED_READ_ERROR_MESSAGE,
-      Errno::EHOSTDOWN             => CONNECTION_ERROR_MESSAGE,
-      Errno::EHOSTUNREACH          => CONNECTION_ERROR_MESSAGE,
-      Errno::ENETUNREACH           => CONNECTION_ERROR_MESSAGE,
-      Errno::EPIPE                 => UNEXPECTED_READ_ERROR_MESSAGE,
-      Errno::ETIMEDOUT             => CONNECT_TIMEOUT_ERROR_MESSAGE,
-      Net::HTTP::Persistent::Error => CONNECTION_ERROR_MESSAGE,
-      Net::OpenTimeout             => CONNECT_TIMEOUT_ERROR_MESSAGE,
-      Net::ReadTimeout             => READ_TIMEOUT_ERROR_MESSAGE,
-      Net::WriteTimeout            => WRITE_TIMEOUT_ERROR_MESSAGE,
-      OpenSSL::SSL::SSLError       => SSL_ERROR_MESSAGE,
-      SocketError                  => CONNECTION_ERROR_MESSAGE
-    }.freeze
-    # rubocop:enable Layout/HashAlignment
+    class TransportError < StandardError
+    end
 
     ####
     ## Low level network errors
     ##
 
-    class TransportError < StandardError; end
-
     class ConnectionError < TransportError
-      attr_reader :wrapped_exception
-
-      def initialize(message, wrapped_exception)
-        super(message)
-        @wrapped_exception = wrapped_exception
-      end
     end
+
+    class TimeoutError < ConnectionError
+    end
+
+    CONNECTION_ERROR_EXCEPTION_MESSAGE = 'Unexpected low level network error. (%<wrapped_exception_name>s)'
+
+    # rubocop:disable Layout/HashAlignment
+    NET_HTTP_EXCEPTIONS_MAP = {
+      IOError                      => ConnectionError,
+      EOFError                     => ConnectionError,
+      Errno::EADDRNOTAVAIL         => ConnectionError,
+      Errno::ECONNABORTED          => ConnectionError,
+      Errno::ECONNREFUSED          => ConnectionError,
+      Errno::ECONNRESET            => ConnectionError,
+      Errno::EHOSTDOWN             => ConnectionError,
+      Errno::EHOSTUNREACH          => ConnectionError,
+      Errno::EINVAL                => ConnectionError,
+      Errno::ENETUNREACH           => ConnectionError,
+      Errno::EPIPE                 => ConnectionError,
+      Errno::ETIMEDOUT             => TimeoutError,
+      Net::HTTP::Persistent::Error => ConnectionError,
+      Net::HTTPBadResponse         => ConnectionError,
+      Net::HTTPHeaderSyntaxError   => ConnectionError,
+      Net::OpenTimeout             => TimeoutError,
+      Net::ProtocolError           => ConnectionError,
+      Net::ReadTimeout             => TimeoutError,
+      Net::WriteTimeout            => TimeoutError,
+      OpenSSL::SSL::SSLError       => ConnectionError,
+      SocketError                  => ConnectionError
+    }.freeze
+    # rubocop:enable Layout/HashAlignment
 
     ####
     ## HTTP errors
@@ -95,8 +77,25 @@ module Likee
         NET_HTTP_EXCEPTIONS_MAP.keys
       end
 
-      def self.message_from_net_http_exception(exception)
-        NET_HTTP_EXCEPTIONS_MAP[exception.class]
+      def self.build_exception_from_net_http_exception(net_http_exception)
+        net_http_exception_class =
+          if net_http_exception.is_a?(Net::HTTP::Persistent::Error)
+            case net_http_exception.message
+            when /connection refused/
+              Errno::ECONNREFUSED
+            when /host down/
+              Errno::EHOSTDOWN
+            else
+              net_http_exception.class
+            end
+          else
+            net_http_exception.class
+          end
+
+        exception_class = NET_HTTP_EXCEPTIONS_MAP[net_http_exception_class]
+        exception_message = CONNECTION_ERROR_EXCEPTION_MESSAGE % { wrapped_exception_name: net_http_exception_class }
+
+        exception_class.new(exception_message)
       end
 
       def self.raise_from_response(response)

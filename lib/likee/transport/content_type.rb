@@ -49,6 +49,8 @@ module Likee
   end
 end
 
+# :nocov:
+
 Likee::ContentType.register(
   name: :json,
   mime_type: 'application/json',

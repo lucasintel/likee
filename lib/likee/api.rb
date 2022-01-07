@@ -61,7 +61,7 @@ module Likee
       referer: 'https://likee.video/',
       custom_device_id: nil,
       custom_user_id: nil,
-      keep_alive_timeout: 30,
+      keep_alive_idle_timeout: 45,
       open_timeout: 5,
       read_timeout: 5,
       write_timeout: 5,
@@ -75,7 +75,7 @@ module Likee
         open_timeout:,
         read_timeout:,
         write_timeout:,
-        keep_alive_timeout:,
+        keep_alive_idle_timeout:,
         proxy:
       )
       @transport = transport.new(@config)

@@ -2,8 +2,9 @@
 
 module Likee
   class Configuration
-    attr_reader :user_agent, :referer, :custom_device_id, :custom_user_id, :open_timeout, :read_timeout,
-                :write_timeout, :keep_alive_timeout, :proxy
+    attr_reader :user_agent, :referer, :custom_device_id, :custom_user_id,
+                :open_timeout, :read_timeout, :write_timeout,
+                :keep_alive_idle_timeout, :proxy
 
     def initialize(
       user_agent:,
@@ -13,7 +14,7 @@ module Likee
       open_timeout:,
       read_timeout:,
       write_timeout:,
-      keep_alive_timeout:,
+      keep_alive_idle_timeout:,
       proxy:
     )
       @user_agent = user_agent
@@ -23,7 +24,7 @@ module Likee
       @open_timeout = open_timeout
       @read_timeout = read_timeout
       @write_timeout = write_timeout
-      @keep_alive_timeout = keep_alive_timeout
+      @keep_alive_idle_timeout = keep_alive_idle_timeout
       @proxy = proxy
       freeze
     end

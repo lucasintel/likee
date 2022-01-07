@@ -29,7 +29,7 @@ module Likee
     end
 
     def reload
-      configue_connection
+      configure_connection
     end
 
     private
@@ -50,7 +50,7 @@ module Likee
 
     def configure_proxy
       if config.proxy
-        connection.proxy = proxy
+        connection.proxy = URI.parse(config.proxy)
       else
         connection.proxy_from_env
       end
@@ -68,7 +68,7 @@ module Likee
     end
 
     def configure_keep_alive
-      connection.idle_timeout = 45
+      connection.idle_timeout = config.keep_alive_idle_timeout
     end
 
     def perform(request)
@@ -91,9 +91,7 @@ module Likee
       response
     rescue *ExceptionManager.net_http_exceptions => e
       duration = compute_duration_ms(request_start)
-
-      message = ExceptionManager.message_from_net_http_exception(e) % { url: request.uri, error: e.class.name }
-      exception = ConnectionError.new(message, e)
+      exception = ExceptionManager.build_exception_from_net_http_exception(e)
 
       instrumentation.notify(
         duration:,

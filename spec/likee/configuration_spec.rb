@@ -10,7 +10,7 @@ RSpec.describe Likee::Configuration do
       open_timeout: 5,
       read_timeout: 5,
       write_timeout: 5,
-      keep_alive_timeout: 30,
+      keep_alive_idle_timeout: 45,
       proxy: 'http://username:password@proxy.example.com'
     )
   end
@@ -23,7 +23,7 @@ RSpec.describe Likee::Configuration do
     expect(subject.open_timeout).to eq(5)
     expect(subject.read_timeout).to eq(5)
     expect(subject.write_timeout).to eq(5)
-    expect(subject.keep_alive_timeout).to eq(30)
+    expect(subject.keep_alive_idle_timeout).to eq(45)
     expect(subject.proxy).to eq('http://username:password@proxy.example.com')
   end
 end
