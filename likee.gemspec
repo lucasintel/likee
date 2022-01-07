@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version     = Likee::VERSION
   spec.authors     = ['kandayo']
   spec.email       = ['kdy@absolab.xyz']
-  spec.summary     = 'A library designed to provide a stable and straightforward interface to the Likee API.'
-  spec.description = spec.summary
+  spec.summary     = 'Likee API client for Ruby'
+  spec.description = 'A library designed to provide a stable and straightforward interface to the Likee API'
   spec.homepage    = 'https://github.com/kandayo/likee'
   spec.license     = 'BSD-3-Clause'
 
@@ -22,10 +22,10 @@ Gem::Specification.new do |spec|
   spec.metadata['source_code_uri'] = spec.homepage
   spec.metadata['rubygems_mfa_required'] = 'true'
 
-  spec.files = %w[LICENSE.txt README.md] + Dir['lib/**/*']
+  spec.files = %w[LICENSE README.md] + Dir['lib/**/*'] + Dir['exe/**/*']
+  spec.require_paths = ['lib']
   spec.bindir = 'exe'
   spec.executables = []
-  spec.require_paths = ['lib']
 
   spec.add_dependency 'net-http-persistent', '~> 4.0'
 
